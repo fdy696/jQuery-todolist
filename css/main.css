@@ -13,13 +13,14 @@ html,body {
   max-width: 900px;
   min-width: 250px;
   margin: 0 auto;
+  padding-top: 15px;
 }
 
 .delete-all {
   cursor: pointer;
   color: rgba(102, 102, 102, 0.767);
   background: rgba(221, 221, 221, 0.689);
-  margin-top: -5px;
+  margin-top: 6px;
 }
 
 
