@@ -170,8 +170,9 @@ function remain_time(){
 
   function delete_task(item,index){
     item.parent().remove();
-    task_list[index]  = "";
+    task_list.splice(index,1);
     store.set("task_list",task_list);
+    render_task();
   }
 
   //4. 刷新页面后渲染所有数据
