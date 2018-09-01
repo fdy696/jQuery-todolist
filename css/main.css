@@ -1,6 +1,7 @@
 html,body {
   height: 100%;
   background: url('http://i1.bvimg.com/660494/59889b34cf46d1ff.jpg') no-repeat center center; 
+  background-size: contain;
   color: #fff;
 }
 
@@ -11,9 +12,8 @@ html,body {
 .layout {
   width: 90%;
   max-width: 900px;
-  min-width: 250px;;
+  min-width: 250px;
   margin: 0 auto;
-  margin-right: 18%;
 }
 
 .delete-all {
