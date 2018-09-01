@@ -19,7 +19,6 @@
        detial_item
        ;
        $("document").ready(function(){
-         console.log($("#remain-time"));
         $("#remain-time").datetimepicker();
         $body.on("click",function(e){
           if(e.target.className.toLowerCase()=="task-detial" || e.target.parentNode.className.toLowerCase()=="task-detial") {
@@ -105,6 +104,7 @@
           width: 0,
           opacity: 0
         })
+        $change_title.hide();
         set_detial(detial_item);
        
       }
@@ -224,12 +224,12 @@ function remain_time(){
       var val = $change_title.val();
       $this.find(".task-content").html(val)
     };
-          
- 
     cur.desc= $detial_desc.val();
     cur.remain = $remain_time.val();
     store.set("task_list",task_list);
     isDetial  = false;
+    $change_title.hide();
+    $task_title.show();
 
    }
 
