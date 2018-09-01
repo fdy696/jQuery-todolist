@@ -30,6 +30,7 @@
                 width:0,
                 opacity:0
               })
+              isDetial = !isDetial;
               set_detial(detial_item);
             }
           }
@@ -41,16 +42,14 @@
   render_task()
   $delete_all.on("click",function(){
     store.clear();
-    add_index = 0,
     render_task()
   })
   $add_task.on("submit",function(e){
     e.preventDefault();
-    e.stopPropagation;
     var val = $add_task_val.val();
     $add_task_val.val("");
     if(val.trim().length>0){    
-      add_task(val,add_index);
+      add_task(val);
     }    
   })
 
@@ -88,17 +87,19 @@
     $detial = $(".task-item-detial");
     listen_title();
     $detial.on("click",function(e){
+      console.log(112);
       e.stopPropagation();
       $this = $(this);
       if(!isDetial) {
         detial_item = $this.parent();
         get_detial(detial_item);
-        isDetial = !isDetial;
         $task_detial.css({
           width: 200,
           opacity: .8
         })
+        isDetial = !isDetial;
       }else {
+        console.log("hahah")
         isDetial = !isDetial;
         $task_detial.css({
           width: 0,
@@ -148,8 +149,9 @@ function remain_time(){
       task_list = store.get("task_list") || [];
   }
 // 2.添加单条数据
-  function add_task(val,index) {
-    var temp = `<li class="task-item bg" data-index=${index}><input type="checkbox" name="task-completed" id=""><span class="task-content">${val}</span><span class="task-item-detial">详情</span><span class="task-item-delete">删除</span></li>`;
+  function add_task(val) {
+    console.log(add_index);
+    var temp = `<li class="task-item bg" data-index=${add_index}><input type="checkbox" name="task-completed" id=""><span class="task-content">${val}</span><span class="task-item-detial">详情</span><span class="task-item-delete">删除</span></li>`;
   $temp = $(temp);
   $task_list.prepend($temp);
   add_index++;
