@@ -257,7 +257,7 @@ function remain_time(){
   }
 
   function remain_show(content,index){
-    my_alert(content).then(isConfirmed=>{
+    my_alert({title:content,confirm:"已完成",cancel:"未完成"}).then(isConfirmed=>{
       if(isConfirmed) {
         change_data(index,true,"before")
        }
