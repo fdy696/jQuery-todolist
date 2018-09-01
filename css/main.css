@@ -16,19 +16,13 @@ html,body {
 }
 
 .delete-all {
-  float: right;
-  overflow: hidden;
   cursor: pointer;
   color: rgba(102, 102, 102, 0.767);
   background: rgba(221, 221, 221, 0.689);
   margin-top: -5px;
 }
 
-.delete-all:after {
-  content: " ";
-  display: block;
-  clear: both;
-}
+
 
 h1.task-title {
   padding: 12px;
