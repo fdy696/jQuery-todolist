@@ -75,7 +75,7 @@
     $delete = $(".task-item-delete");
     $delete.on("click",function(){
       $this = $(this);
-      my_alert("您确定要取消嘛").then(isConfirmed=>{
+      my_alert("您确定要删除嘛").then(isConfirmed=>{
         if(isConfirmed) {
           var index = $this.parent().attr("data-index");
           delete_task($this,index);

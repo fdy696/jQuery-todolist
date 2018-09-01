@@ -1,7 +1,11 @@
 ~function(){
   function my_alert(opts){
     return new Promise((resolve,reject)=>{
-      var config = {},
+      var config = {
+        title:"",
+        confirm:"",
+        cancel:""
+      },
          $body = $('body'),
          $box,
          $mask,
