@@ -14,9 +14,8 @@
        $remain_time= $("#remain-time"),
        $music = $("audio")[0],
        isDetial = false,
-       add_index = 0,
        task_list = [],
-       detial_item
+       detial_index 
        ;
        $("document").ready(function(){
         $("#remain-time").datetimepicker();
@@ -30,8 +29,8 @@
                 width:0,
                 opacity:0
               })
-              isDetial = !isDetial;
-              set_detial(detial_item);
+              set_detial(detial_index);
+              isDetial = false;
             }
           }
         })
@@ -42,10 +41,11 @@
   render_task()
   $delete_all.on("click",function(){
     store.clear();
-    render_task()
+    render_task();
   })
   $add_task.on("submit",function(e){
     e.preventDefault();
+    e.stopPropagation();
     var val = $add_task_val.val();
     $add_task_val.val("");
     if(val.trim().length>0){    
@@ -54,9 +54,7 @@
   })
 
   
-  function listen_completed(){
-    $completed = $("input[name='task-completed']");
-    $completed.on("click",function(){
+    $task_list.on("click","input[name='task-completed']", function(e){
       $this = $(this);    
       var isCompleted = $this.is(":checked");
       var index = get_index($this);
@@ -67,59 +65,40 @@
       }
     })
     
-  }
 
-  function listen_delete() {
-    $delete = $(".task-item-delete");
-    $delete.on("click",function(){
+
+    $task_list.on("click",".task-item-delete", function(e){
       $this = $(this);
       my_alert("您确定要删除嘛").then(isConfirmed=>{
         if(isConfirmed) {
           var index = $this.parent().attr("data-index");
-          delete_task($this,index);
+          delete_task(index);
         }
 
       })
     })
-  }
+
   // 监听详情
-  function listen_detial(){
-    $detial = $(".task-item-detial");
-    listen_title();
-    $detial.on("click",function(e){
-      console.log(112);
+    $task_list.on("click",".task-item-detial", function(e){
       e.stopPropagation();
       $this = $(this);
-      if(!isDetial) {
-        detial_item = $this.parent();
-        get_detial(detial_item);
-        $task_detial.css({
-          width: 200,
-          opacity: .8
-        })
-        isDetial = !isDetial;
-      }else {
-        console.log("hahah")
-        isDetial = !isDetial;
-        $task_detial.css({
-          width: 0,
-          opacity: 0
-        })
-        $change_title.hide();
-        set_detial(detial_item);
-       
-      }
-      
-    })
-  }
+      isDetial = !isDetial;
+      if(isDetial){
+        get_detial($this);
+        $task_detial.css({width: 200,opacity: .8});
+      }else{
+        set_detial(detial_index);
+        $task_detial.css({width: 0,opacity: 0})
+      };
 
-  function listen_title(){
-    $task_title.on("click",function(e){
+     })
+
+
+$task_title.on("click",function(e){
       e.stopPropagation();
       $(this).hide();
       $change_title.show();
-    })
-  }
+  });
  
 remain_time()
 function remain_time(){
@@ -150,28 +129,23 @@ function remain_time(){
   }
 // 2.添加单条数据
   function add_task(val) {
-    console.log(add_index);
+    var add_index = task_list.length;
     var temp = `<li class="task-item bg" data-index=${add_index}><input type="checkbox" name="task-completed" id=""><span class="task-content">${val}</span><span class="task-item-detial">详情</span><span class="task-item-delete">删除</span></li>`;
   $temp = $(temp);
   $task_list.prepend($temp);
-  add_index++;
   // new_task需要新建，要不然指向同一个地址，修改一个会修改所有；
   var new_task = {};
   new_task.content = val;
   // 向列表及数据库中添加
   task_list.push(new_task);
-  new_new_task = null;
+  new_task = null;
   store.set("task_list",task_list);
-  listen_delete();
-  listen_detial();
-  listen_completed()
   }
 
   
   // 3.删除某条数据
 
-  function delete_task(item,index){
-    item.parent().remove();
+  function delete_task(index){
     task_list.splice(index,1);
     store.set("task_list",task_list);
     render_task();
@@ -197,19 +171,17 @@ function remain_time(){
 
     $task_list.html(temp);
     
-    listen_delete();
-    listen_detial();
-    listen_completed()
    }
   //  5.change_detial
 
-  function get_detial($this){
-   var index = $this.attr("data-index")
+  function get_detial(item){
+  $this = item.parent();
+   var index = $this.attr("data-index");
+   detial_index = index;
    var  cur = task_list[index],
     title = cur.content,
     desc = cur.desc,
     time = cur.remain;
-
     $task_title.html(title);
     $change_title.val(title);
     $detial_desc.val(desc);
@@ -217,9 +189,7 @@ function remain_time(){
 
   }
 
-  function set_detial($this) {
-   if(isDetial) {
-    var index = $this.attr("data-index")
+  function set_detial(index) {
     var  cur = task_list[index];
     if(cur && $change_title.val()) {
       cur.content = $change_title.val();
@@ -229,12 +199,8 @@ function remain_time(){
     cur.desc= $detial_desc.val();
     cur.remain = $remain_time.val();
     store.set("task_list",task_list);
-    isDetial  = false;
     $change_title.hide();
     $task_title.show();
-
-   }
-
   }
 
   // getCur 获取当前元素在list_style中的对应
